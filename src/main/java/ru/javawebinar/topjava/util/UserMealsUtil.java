@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -23,12 +24,32 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31,13,0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31,20,0), "Ужин", 510)
         );
-        getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
+        getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(10,0), 2000)
+                .forEach(System.out::println);
 //        .toLocalDate();
 //        .toLocalTime();
     }
 
     public static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        // TODO return filtered list with correctly exceeded field
+        Map<LocalDate, Integer> map = mealList
+                .stream()
+                .collect(Collectors.toMap(
+                        um -> um.getDateTime().toLocalDate(),
+                        UserMeal::getCalories,
+                        (calories1, calories2) -> calories1 + calories2));
+
+        return mealList
+                .stream()
+                .filter(um ->   um.getDateTime().toLocalTime().isAfter(startTime) &&
+                                um.getDateTime().toLocalTime().isBefore(endTime) ||
+                                um.getDateTime().toLocalTime().equals(startTime) ||
+                                um.getDateTime().toLocalTime().equals(endTime))
+                .map(um -> new UserMealWithExceed(um, map.get(um.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
+    }
+
+    public static List<UserMealWithExceed>  getFilteredWithExceededByCycle(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with correctly exceeded field
         Map<LocalDate, Integer> map = new HashMap<>();
 
