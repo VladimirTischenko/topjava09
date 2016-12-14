@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.dao.MealDao;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,8 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 11.01.2015.
  */
 public class Meal{
-    private static AtomicInteger idCounter = new AtomicInteger();
-
     private int id;
 
     private LocalDateTime dateTime;
@@ -21,7 +21,7 @@ public class Meal{
     private int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.id = idCounter.getAndIncrement();
+        this.id = MealDao.getId();
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;

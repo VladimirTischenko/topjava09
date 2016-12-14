@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Vladimir on 12.12.2016.
@@ -14,8 +15,14 @@ import java.util.List;
 public class MealDao {
     private static List<Meal> meals = MealsUtil.meals;
 
+    private static AtomicInteger idCounter;
+
+    public static void setIdCounter(AtomicInteger idCounter) {
+        MealDao.idCounter = idCounter;
+    }
+
     public List<MealWithExceed> getAll(){
-        return MealsUtil.getFilteredWithExceeded(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+        return MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
     }
 
 
@@ -44,5 +51,9 @@ public class MealDao {
                 meal.setCalories(calories);
             }
         }
+    }
+
+    public static int getId(){
+        return idCounter.getAndIncrement();
     }
 }
