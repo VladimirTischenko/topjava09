@@ -60,7 +60,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--Web-->
+        <!-- Web -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -68,7 +68,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--JSTL-->
+        <!-- JSTL -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
