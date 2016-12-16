@@ -1,11 +1,10 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.dao.MealDao;
+import ru.javawebinar.topjava.dao.MemoryMealDao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * GKislin
@@ -21,7 +20,7 @@ public class Meal{
     private int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.id = MealDao.getId();
+        this.id = MemoryMealDao.getId();
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
