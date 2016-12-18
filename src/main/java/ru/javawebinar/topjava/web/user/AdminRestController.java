@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.web.user;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.User;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * GKislin
@@ -13,7 +13,7 @@ import java.util.List;
 public class AdminRestController extends AbstractUserController {
 
     @Override
-    public List<User> getAll() {
+    public Collection<User> getAll() {
         return super.getAll();
     }
 

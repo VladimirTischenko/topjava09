@@ -2,7 +2,9 @@ package ru.javawebinar.topjava.model;
 
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class User extends NamedEntity {
 
     private boolean enabled = true;
 
-    private Date registered = new Date();
+    private LocalDateTime registered = LocalDateTime.now();
 
     private Set<Role> roles;
 
@@ -27,8 +29,21 @@ public class User extends NamedEntity {
     public User() {
     }
 
+    public User(String name, String email, String password, Role role, Role... roles) {
+        this(null, name, email, password, MealsUtil.DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
+    }
+
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, MealsUtil.DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
+    }
+
+    public User(String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
+        super(null, name);
+        this.email = email;
+        this.password = password;
+        this.caloriesPerDay = caloriesPerDay;
+        this.enabled = enabled;
+        this.roles = roles;
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
@@ -52,11 +67,11 @@ public class User extends NamedEntity {
         this.password = password;
     }
 
-    public Date getRegistered() {
+    public LocalDateTime getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Date registered) {
+    public void setRegistered(LocalDateTime registered) {
         this.registered = registered;
     }
 
