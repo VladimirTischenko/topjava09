@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.repository.mock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -37,8 +36,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        boolean deleteMeal = (repository.get(id).getUserId() == AuthorizedUser.id());
+    public boolean delete(int id, int userId) {
+        boolean deleteMeal = (repository.get(id).getUserId() == userId);
         if (deleteMeal) {
             repository.remove(id);
             LOG.info("delete meal " + id);
@@ -47,18 +46,18 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal get(int id, int userId) {
         LOG.info("get meal " + id);
         Meal meal = repository.get(id);
-        return (meal.getUserId() == AuthorizedUser.id()) ? meal : null;
+        return (meal.getUserId() == userId) ? meal : null;
     }
 
     @Override
-    public Collection<Meal> getAll() {
+    public Collection<Meal> getAll(int userId) {
         LOG.info("getAllMeals");
         return repository.values()
                 .stream()
-                .filter(meal -> meal.getUserId()== AuthorizedUser.id())
+                .filter(meal -> meal.getUserId()== userId)
                 .sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()))
                 .collect(Collectors.toList());
     }
