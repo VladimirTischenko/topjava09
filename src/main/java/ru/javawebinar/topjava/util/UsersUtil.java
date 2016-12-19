@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class UsersUtil {
     public static final List<User> USERS = Arrays.asList(
-            new User("Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN, Role.ROLE_USER),
-            new User("User", "user@gmail.com", "user", Role.ROLE_USER)
+            new User("User", "user@gmail.com", "user", Role.ROLE_USER),
+            new User("Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN, Role.ROLE_USER)
     );
 }
