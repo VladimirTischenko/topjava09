@@ -6,6 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -15,7 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -63,8 +66,20 @@ public class MealServlet extends HttpServlet {
 
         if (action == null) {
             LOG.info("getAll");
+
+            LocalDate startDate = DateTimeUtil.toLocalDate(request.getParameter("startDate"));
+            LocalDate endDate = DateTimeUtil.toLocalDate(request.getParameter("endDate"));
+            LocalTime startTime = DateTimeUtil.toLocalTime(request.getParameter("startTime"));
+            LocalTime endTime = DateTimeUtil.toLocalTime(request.getParameter("endTime"));
+
+            request.setAttribute("startDate", startDate);
+            request.setAttribute("endDate", endDate);
+            request.setAttribute("startTime", startTime);
+            request.setAttribute("endTime", endTime);
+
             request.setAttribute("meals",
-                    MealsUtil.getWithExceeded(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                    MealsUtil.getFilteredWithExceeded(controller.getAll(),
+                            startDate, endDate, startTime, endTime,MealsUtil.DEFAULT_CALORIES_PER_DAY));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
