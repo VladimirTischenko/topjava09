@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import javax.servlet.ServletConfig;
@@ -34,8 +35,15 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("forward to users");
+        LOG.debug("forward to users (doGet)");
         request.setAttribute("users", controller.getAll());
         request.getRequestDispatcher("/users.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LOG.debug("forward to users (doPost)");
+        AuthorizedUser.setId(Integer.parseInt(request.getParameter("userId")));
+        response.sendRedirect("meals");
     }
 }
