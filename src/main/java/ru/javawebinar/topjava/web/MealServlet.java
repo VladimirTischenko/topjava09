@@ -7,7 +7,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -77,9 +76,7 @@ public class MealServlet extends HttpServlet {
             request.setAttribute("startTime", startTime);
             request.setAttribute("endTime", endTime);
 
-            request.setAttribute("meals",
-                    MealsUtil.getFilteredWithExceeded(controller.getAll(),
-                            startDate, endDate, startTime, endTime,MealsUtil.DEFAULT_CALORIES_PER_DAY));
+            request.setAttribute("meals", controller.getAll(startDate, endDate, startTime, endTime));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
