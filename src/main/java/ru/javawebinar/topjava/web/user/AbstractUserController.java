@@ -8,6 +8,9 @@ import ru.javawebinar.topjava.service.UserService;
 
 import java.util.Collection;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.checkIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
+
 /**
  * User: gkislin
  */
@@ -28,7 +31,7 @@ public abstract class AbstractUserController {
     }
 
     public User create(User user) {
-        user.setId(null);
+        checkNew(user);
         LOG.info("create " + user);
         return service.save(user);
     }
@@ -39,7 +42,7 @@ public abstract class AbstractUserController {
     }
 
     public void update(User user, int id) {
-        user.setId(id);
+        checkIdConsistent(user, id);
         LOG.info("update " + user);
         service.update(user);
     }
