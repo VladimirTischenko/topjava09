@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.util.UsersUtil;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -30,20 +31,16 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public boolean delete(int id) {
         LOG.info("delete " + id);
-        boolean wasContains = repository.containsKey(id);
-        repository.remove(id);
-        return wasContains;
+        return repository.remove(id) != null;
     }
 
     @Override
     public User save(User user) {
         LOG.info("save " + user);
-
         if (user.isNew()) {
             user.setId(counter.incrementAndGet());
         }
         repository.put(user.getId(), user);
-
         return user;
     }
 
@@ -56,15 +53,16 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public Collection<User> getAll() {
         LOG.info("getAll");
-        Collection<User> userCollection = repository.values();
-        List<User> userList = new ArrayList<>(userCollection);
-        userList.sort(Comparator.comparing(NamedEntity::getName));
-        return userList;
+        return repository.values().stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+                .collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
         LOG.info("getByEmail " + email);
-        return getAll().stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null);
+        return repository.values().stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(email))
+                .findFirst().orElse(null);
     }
 }

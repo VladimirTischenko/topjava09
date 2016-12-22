@@ -14,14 +14,9 @@ public class DateTimeUtil {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {
-        return (startTime == null || lt.compareTo(startTime) >= 0) &&
-                (endTime == null || lt.compareTo(endTime) <= 0);
-    }
-
-    public static boolean isBetween(LocalDate ld, LocalDate startDate, LocalDate endDate) {
-        return (startDate == null || ld.compareTo(startDate) >= 0) &&
-                (endDate == null || ld.compareTo(endDate) <= 0);
+    public static <T extends Comparable<? super T>> boolean isBetween(T t, T t1, T t2) {
+        return (t1 == null || t.compareTo(t1) >= 0) &&
+                (t2 == null || t.compareTo(t2) <= 0);
     }
 
     public static String toString(LocalDateTime ldt) {
