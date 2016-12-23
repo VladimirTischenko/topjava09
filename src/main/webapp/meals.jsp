@@ -5,23 +5,7 @@
 <html>
 <head>
     <title>Meal list</title>
-    <style>
-        .normal {
-            color: green;
-        }
-
-        .exceeded {
-            color: red;
-        }
-        dt {
-            display: inline-block;
-            width: 80px;
-        }
-        dd {
-            display: inline-block;
-            width: 200px;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 <section>
