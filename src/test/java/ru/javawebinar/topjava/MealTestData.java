@@ -24,7 +24,7 @@ public class MealTestData {
     public static final Meal USER_MEAL1 = new Meal(USER_MEAL1_ID, LocalDateTime.of(2015, 5, 30, 10, 0), "Завтрак", 500);
     public static final Meal USER_MEAL2 = new Meal(USER_MEAL2_ID, LocalDateTime.of(2015, 5, 30, 13, 0), "Обед", 1000);
     public static final Meal USER_MEAL3 = new Meal(USER_MEAL3_ID, LocalDateTime.of(2015, 5, 30, 20, 0), "Ужин", 500);
-    public static final Meal USER_MEAL4 = new Meal(USER_MEAL4_ID, LocalDateTime.of(2015, 5, 31, 10, 0), "Завтрак", 100);
+    public static final Meal USER_MEAL4 = new Meal(USER_MEAL4_ID, LocalDateTime.of(2015, 5, 31, 10, 0), "Завтрак", 1000);
     public static final Meal USER_MEAL5 = new Meal(USER_MEAL5_ID, LocalDateTime.of(2015, 5, 31, 13, 0), "Обед", 500);
     public static final Meal USER_MEAL6 = new Meal(USER_MEAL6_ID, LocalDateTime.of(2015, 5, 31, 20, 0), "Ужин", 510);
     public static final Meal ADMIN_MEAL1 = new Meal(ADMIN_MEAL1_ID, LocalDateTime.of(2015, 6, 1, 14, 0), "Админ ланч", 510);
