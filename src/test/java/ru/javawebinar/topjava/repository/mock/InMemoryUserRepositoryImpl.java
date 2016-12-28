@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -51,7 +52,10 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
-        return repository.remove(id) != null;
+        if (repository.remove(id) == null) {
+            throw new NotFoundException("id=" + id);
+        }
+        return true;
     }
 
     @Override

@@ -29,12 +29,12 @@ public class SpringMain {
             adminUserController.create(new User(null, "NewSpringMainUser", "new@gmail.com", "newPass", 1555, false, Collections.singleton(Role.ROLE_USER)));
             System.out.println();
 
-//            MealRestController mealController = appCtx.getBean(MealRestController.class);
-//            List<MealWithExceed> filteredMealsWithExceeded =
-//                    mealController.getBetween(
-//                            LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),
-//                            LocalDate.of(2015, Month.MAY, 31), LocalTime.of(11, 0));
-//            filteredMealsWithExceeded.forEach(System.out::println);
+            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            List<MealWithExceed> filteredMealsWithExceeded =
+                    mealController.getBetween(
+                            LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),
+                            LocalDate.of(2015, Month.MAY, 31), LocalTime.of(11, 0));
+            filteredMealsWithExceeded.forEach(System.out::println);
         }
     }
 }
