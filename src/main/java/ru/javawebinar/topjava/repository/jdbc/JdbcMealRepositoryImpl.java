@@ -36,7 +36,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource) {
         this.insertMeal = new SimpleJdbcInsert(dataSource)
-                .withTableName("MEALS")
+                .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
     }
 
@@ -53,9 +53,11 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else {
-            namedParameterJdbcTemplate.update(
+            if (namedParameterJdbcTemplate.update(
                     "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories " +
-                            "WHERE id=:id AND user_id=:userId", map);
+                            "WHERE id=:id AND user_id=:userId", map) == 0) {
+                return null;
+            }
         }
         return meal;
     }
