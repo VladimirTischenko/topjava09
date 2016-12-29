@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -45,10 +46,20 @@ public class MealServiceTest {
         MATCHER.assertEquals(USER_MEAL1, meal);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void getNotFound() throws Exception {
+        service.get(ADMIN_MEAL1_ID, USER_ID);
+    }
+
     @Test
     public void delete() throws Exception {
         service.delete(ADMIN_MEAL1_ID, ADMIN_ID);
         MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN_MEAL2), service.getAll(ADMIN_ID));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void deleteNotFound() throws Exception {
+        service.delete(ADMIN_MEAL1_ID, USER_ID);
     }
 
     @Test
@@ -72,6 +83,11 @@ public class MealServiceTest {
         updated.setCalories(600);
         service.update(updated, USER_ID);
         MATCHER.assertEquals(updated, service.get(USER_MEAL1_ID, USER_ID));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateNotFound() throws Exception {
+        service.update(ADMIN_MEAL1, USER_ID);
     }
 
     @Test
