@@ -1,4 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/03a62d21c3294b53b598fa0b43d2a83e)](https://www.codacy.com/app/vtischenko/topjava09?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=VladimirTischenko/topjava09&amp;utm_campaign=Badge_Grade)
+[![Dependency Status](https://dependencyci.com/github/VladimirTischenko/topjava09/badge)](https://dependencyci.com/github/VladimirTischenko/topjava09)
 
 Java Enterprise Online Project 
 ===============================
