@@ -13,9 +13,9 @@ import java.time.LocalTime;
  * 11.01.2015.
  */
 @NamedQueries({
-            @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m LEFT JOIN FETCH m.user " +
+            @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m " +
                     "WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
-            @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m LEFT JOIN FETCH m.user " +
+            @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m " +
                     "WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC"),
             @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m LEFT JOIN FETCH m.user " +
                     "WHERE m.id=:id AND m.user.id=:userId"),
@@ -47,7 +47,7 @@ public class Meal extends BaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     public Meal() {
