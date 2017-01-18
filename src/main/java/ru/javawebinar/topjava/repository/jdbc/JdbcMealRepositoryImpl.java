@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
@@ -21,18 +20,17 @@ import java.util.List;
  * Date: 26.08.2014
  */
 
-@Repository
-public class JdbcMealRepositoryImpl implements MealRepository {
+public abstract class JdbcMealRepositoryImpl implements MealRepository {
 
-    private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    protected static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
-    private SimpleJdbcInsert insertMeal;
+    @Autowired
+    protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    protected SimpleJdbcInsert insertMeal;
 
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource) {
