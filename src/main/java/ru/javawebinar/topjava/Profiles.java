@@ -5,7 +5,7 @@ package ru.javawebinar.topjava;
  * Date: 19.08.2014
  */
 public class Profiles {
-    private static final String
+    public static final String
             POSTGRES = "postgres",
             HSQLDB = "hsqldb",
             JDBC = "jdbc",
