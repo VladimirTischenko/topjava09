@@ -133,6 +133,10 @@ public class User extends NamedEntity {
         return password;
     }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public List<Meal> getMeals() {
         return meals;
     }
