@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
@@ -8,8 +8,7 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section>
-    <%--<h2>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h2>--%>
-    <h2><fmt:message key="meal.title"/></h2>
+    <h2><fmt:message key="${param.id==null ? 'meal.titleCreate' : 'meal.titleUpdate'}"/></h2>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="post" action="meals">
