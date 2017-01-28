@@ -10,22 +10,19 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: gkislin
  * Date: 26.08.2014
  */
-
+@Transactional(readOnly = true)
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository {
 
@@ -48,6 +45,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
@@ -58,6 +56,12 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 .addValue("enabled", user.isEnabled())
                 .addValue("caloriesPerDay", user.getCaloriesPerDay());
 
+        Set<Role> roles = user.getRoles();
+        List<String> strings = new ArrayList<>();
+
+        for (Role role : roles) {
+            strings.add(role.toString());
+        }
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(map);
             user.setId(newKey.intValue());
@@ -65,11 +69,16 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
+        }
+        for (String string : strings) {
+            jdbcTemplate.update("INSERT INTO user_roles (role, user_id) VALUES (?, ?)", string, user.getId());
         }
         return user;
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
@@ -94,7 +103,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         List<User> users = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", USER_ROW_MAPPER);
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT id, role FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id ORDER BY name, email");
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT id, role FROM users" +
+                " LEFT JOIN user_roles ON users.id = user_roles.user_id ORDER BY name, email");
         while (sqlRowSet.next()) {
             int id = sqlRowSet.getInt("id");
             String s = sqlRowSet.getString("role");
