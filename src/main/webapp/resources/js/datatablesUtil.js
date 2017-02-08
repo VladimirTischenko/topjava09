@@ -1,6 +1,10 @@
 function makeEditable() {
     $('.delete').click(function () {
-        deleteRow($('.itemId').attr("id"));
+        deleteRow($(this).attr("id"));
+    });
+
+    $('.checkbox').click(function () {
+        changeEnabled($(this).attr("id"));
     });
 
     $('#detailsForm').submit(function () {

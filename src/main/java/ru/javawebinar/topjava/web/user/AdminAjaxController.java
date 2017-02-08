@@ -39,4 +39,11 @@ public class AdminAjaxController extends AbstractUserController {
             super.update(user, id);
         }
     }
+
+    @GetMapping(value = "/changeEnabled/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void changeEnabled(@PathVariable("id") int id) {
+        User user = super.get(id);
+        user.setEnabled(!user.isEnabled());
+        super.update(user, id);
+    }
 }

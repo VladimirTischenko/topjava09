@@ -40,3 +40,15 @@ $(function () {
     });
     makeEditable();
 });
+
+function changeEnabled(id) {
+    // debugger;
+    $.ajax({
+        url: ajaxUrl + 'changeEnabled/' + id,
+        type: 'GET',
+        success: function () {
+            updateTable();
+            successNoty('Enabled change');
+        }
+    });
+}
