@@ -33,6 +33,9 @@
                 </dl>
                 <%--<button type="submit"><spring:message code="meals.filter"/></button>--%>
                 <button type="submit" class="btn btn-sm btn-info"><spring:message code="meals.filter"/></button>
+                <button type="reset" class="btn btn-sm btn-info" onclick="updateTable()">
+                    <spring:message code="meals.clearFilter"/>
+                </button>
             </form>
 
             <hr>
