@@ -8,6 +8,11 @@ function makeEditable() {
         return false;
     });
 
+    $('#filterDetails').submit(function () {
+        filter();
+        return false;
+    });
+
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
@@ -23,21 +28,21 @@ function deleteRow(id) {
         url: ajaxUrl + id,
         type: 'DELETE',
         success: function () {
-            updateTable();
+            filter();
             successNoty('Deleted');
         }
     });
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.clear();
-        $.each(data, function (key, item) {
-            datatableApi.row.add(item);
-        });
-        datatableApi.draw();
-    });
-}
+// function updateTable() {
+//     $.get(ajaxUrl, function (data) {
+//         datatableApi.clear();
+//         $.each(data, function (key, item) {
+//             datatableApi.row.add(item);
+//         });
+//         datatableApi.draw();
+//     });
+// }
 
 function save() {
     var form = $('#detailsForm');
@@ -47,7 +52,7 @@ function save() {
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable();
+            filter();
             successNoty('Saved');
         }
     });
@@ -78,5 +83,22 @@ function failNoty(event, jqXHR, options, jsExc) {
         text: 'Failed: ' + jqXHR.statusText + "<br>",
         type: 'error',
         layout: 'bottomRight'
+    });
+}
+
+function filter() {
+    var form = $('#filterDetails');
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + 'filter',
+        data: form.serialize(),
+        success: function (data) {
+            datatableApi.clear();
+            $.each(data, function (key, item) {
+                datatableApi.row.add(item);
+            });
+            datatableApi.draw();
+            successNoty('Filtered');
+        }
     });
 }
