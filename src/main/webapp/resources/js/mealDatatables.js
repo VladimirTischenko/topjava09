@@ -29,7 +29,6 @@ $(function () {
                 "data": "dateTime",
                 "render": function (date, type, row) {
                     if (type == 'display') {
-                        debugger;
                         return '<span>' + date.substring(0, 16).replace('T', ' ') + '</span>';
                     }
                     return date;

@@ -63,7 +63,7 @@
                 </div>
                     </div>
                 </div>
-                <a class="btn btn-info" onclick="add()">
+                <a class="btn btn-info" onclick="add('<spring:message code="users.add"/>')">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </a>
                 <table class="table table-striped display" id="datatable">
@@ -88,7 +88,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="modalTitle"><spring:message code="meals.add"/></h2>
+                <h2 class="modal-title" id="modalTitle"></h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="detailsForm">
@@ -136,7 +136,7 @@
 <script type="text/javascript">
     var i18n = [];
 
-    var editTitle ='<spring:message code="users.edit"/>';
+    var editTitle ='<spring:message code="meals.edit"/>';
     <c:forEach var='key' items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.failed"}%>'>
     i18n['${key}'] = '<spring:message code="${key}"/>';
     </c:forEach>
