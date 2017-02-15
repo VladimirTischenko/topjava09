@@ -7,6 +7,8 @@
 <body>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js" defer></script>
+<script src="resources/js/jquery.js"></script>
+<script src="resources/js/jquery.datetimepicker.full.min.js"></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron">
@@ -21,33 +23,20 @@
                     <div class="panel-body">
                         <form class="form-horizontal" id="filter">
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="startDate"><spring:message
+                                <label class="control-label col-sm-2" for="startDateTime"><spring:message
                                         code="meals.startDate"/>:</label>
 
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="date" name="startDate" id="startDate">
+                                    <input class="form-control datetimepicker" id="startDateTime" name="startDateTime"
+                                           type="text" >
                                 </div>
 
-                                <label class="control-label col-sm-3" for="startTime"><spring:message
-                                        code="meals.startTime"/>:</label>
-
-                                <div class="col-sm-3">
-                                    <input class="form-control" type="time" name="startTime" id="startTime">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="endDate"><spring:message
+                                <label class="control-label col-sm-2" for="endDateTime"><spring:message
                                         code="meals.endDate"/>:</label>
 
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="date" name="endDate" id="endDate">
-                                </div>
-
-                                <label class="control-label col-sm-3" for="endTime"><spring:message
-                                        code="meals.endTime"/>:</label>
-
-                                <div class="col-sm-3">
-                                    <input class="form-control" type="time" name="endTime" id="endTime">
+                                    <input class="form-control datetimepicker" id="endDateTime" name="endDateTime"
+                                           type="text">
                                 </div>
                             </div>
                         </form>
@@ -133,6 +122,11 @@
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    jQuery('.datetimepicker').datetimepicker({
+        format:'Y-m-d H:i'
+    });
+</script>
 <script type="text/javascript">
     var i18n = [];
 
