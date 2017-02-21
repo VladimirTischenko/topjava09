@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.util.exception.FieldCanNotBeEmptyException;
+import ru.javawebinar.topjava.util.exception.FieldNotInRange;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -42,7 +44,25 @@ public class MealAjaxController extends AbstractMealController {
 
     @PostMapping
     public ResponseEntity<String> updateOrCreate(@Valid Meal meal, BindingResult result) {
-        // TODO change to exception handler
+        if (meal.getDateTime() == null){
+            throw new FieldCanNotBeEmptyException("DateTime can not be empty!");
+        }
+
+        if ("".equals(meal.getDescription())){
+            throw new FieldCanNotBeEmptyException("Description can not be empty!");
+        }
+
+        int calories;
+        try {
+            calories = meal.getCalories();
+        } catch (NullPointerException e){
+            calories = 0;
+        }
+
+        if(calories < 10 || calories > 5000){
+            throw new FieldNotInRange("calories must between 10 and 5000");
+        }
+
         if (result.hasErrors()) {
             return ValidationUtil.getErrorResponse(result);
         }

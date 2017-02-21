@@ -9,9 +9,13 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.util.exception.FieldCanNotBeEmptyException;
+import ru.javawebinar.topjava.util.exception.FieldNotInRange;
 
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: grigory.kislin
@@ -40,8 +44,25 @@ public class AdminAjaxController extends AbstractUserController {
 
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
+        String password = userTo.getPassword();
+
+        Map<String, String> userToFields = new LinkedHashMap<String, String>();
+        userToFields.put("Name", userTo.getName());
+        userToFields.put("Email", userTo.getEmail());
+        userToFields.put("Password", password);
+
+        for(Map.Entry entry : userToFields.entrySet()){
+            if ("".equals(entry.getValue())){
+                throw new FieldCanNotBeEmptyException(entry.getKey() + " can not be empty!");
+            }
+        }
+
+        int passwordLength = password.length();
+        if(passwordLength < 5 || passwordLength > 64){
+            throw new FieldNotInRange("password must between 5 and 64 characters");
+        }
+
         if (result.hasErrors()) {
-            // TODO change to exception handler
             return ValidationUtil.getErrorResponse(result);
         }
         if (userTo.isNew()) {
