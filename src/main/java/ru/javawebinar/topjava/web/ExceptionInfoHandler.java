@@ -6,10 +6,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ru.javawebinar.topjava.util.exception.FieldCanNotBeEmptyException;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
-import ru.javawebinar.topjava.util.exception.FieldNotInRange;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,18 +22,10 @@ public class ExceptionInfoHandler {
     Logger LOG = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(FieldCanNotBeEmptyException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ErrorInfo canNotBeEmptyError(HttpServletRequest req, FieldCanNotBeEmptyException e) {
-        return logAndGetErrorInfo(req, e, false);
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(FieldNotInRange.class)
-    @ResponseBody
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ErrorInfo fieldNotInRange(HttpServletRequest req, FieldNotInRange e) {
+    @Order(Ordered.HIGHEST_PRECEDENCE + 2)
+    public ErrorInfo canNotBeEmptyError(HttpServletRequest req, MethodArgumentNotValidException e) {
         return logAndGetErrorInfo(req, e, false);
     }
 
