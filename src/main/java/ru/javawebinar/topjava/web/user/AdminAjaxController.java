@@ -1,5 +1,9 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
-import ru.javawebinar.topjava.util.ValidationUtil;
-import ru.javawebinar.topjava.util.exception.FieldCanNotBeEmptyException;
-import ru.javawebinar.topjava.util.exception.FieldNotInRange;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: grigory.kislin
@@ -23,6 +22,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/ajax/admin/users")
 public class AdminAjaxController extends AbstractUserController {
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,31 +46,15 @@ public class AdminAjaxController extends AbstractUserController {
 
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
-        String password = userTo.getPassword();
-
-        Map<String, String> userToFields = new LinkedHashMap<String, String>();
-        userToFields.put("Name", userTo.getName());
-        userToFields.put("Email", userTo.getEmail());
-        userToFields.put("Password", password);
-
-        for(Map.Entry entry : userToFields.entrySet()){
-            if ("".equals(entry.getValue())){
-                throw new FieldCanNotBeEmptyException(entry.getKey() + " can not be empty!");
+        try {
+            if (userTo.isNew()) {
+                super.create(UserUtil.createNewFromTo(userTo));
+            } else {
+                super.update(userTo);
             }
-        }
-
-        int passwordLength = password.length();
-        if(passwordLength < 5 || passwordLength > 64){
-            throw new FieldNotInRange("password must between 5 and 64 characters");
-        }
-
-        if (result.hasErrors()) {
-            return ValidationUtil.getErrorResponse(result);
-        }
-        if (userTo.isNew()) {
-            super.create(UserUtil.createNewFromTo(userTo));
-        } else {
-            super.update(userTo);
+        } catch (DataIntegrityViolationException e){
+            throw new DataIntegrityViolationException(messageSource.getMessage("common.emailDublicated",
+                    null, LocaleContextHolder.getLocale()));
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
