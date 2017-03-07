@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -8,12 +9,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Locale;
 
 /**
  * User: gkislin
@@ -21,6 +25,9 @@ import javax.validation.Valid;
  */
 @Controller
 public class RootController extends AbstractUserController {
+
+    @Autowired
+    private SessionLocaleResolver localeResolver;
 
     @GetMapping("/")
     public String root() {
@@ -84,5 +91,13 @@ public class RootController extends AbstractUserController {
             status.setComplete();
             return "redirect:login?message=app.registered&username=" + userTo.getEmail();
         }
+    }
+
+    @GetMapping("/locale")
+    public String locale(HttpServletRequest request) {
+        String language = request.getParameter("language");
+//        System.out.println("language: " + language);
+        localeResolver.setDefaultLocale(new Locale(language));
+        return "redirect:meals";
     }
 }
